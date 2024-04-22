@@ -109,7 +109,7 @@ To run the app, run the following commands:
 
 - GitHub: [@omwomo](https://github.com/omwomo)
 - Twitter [@eugeneoduor9](https://twitter.com/eugeneoduor9)
-- LinkedIn: [@bhushan354](https://www.linkedin.com/in/Omwomo/)
+- LinkedIn: [@omwomo](https://www.linkedin.com/in/Omwomo/)
 
 
 ## 🔭 Future Features <a name="future-features"></a>
