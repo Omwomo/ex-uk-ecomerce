@@ -3,10 +3,7 @@ class Ability
 
   def initialize(user)
     user ||= User.new # Guest user
-    if user.admin?
-      can :manage, Product
-    else
-      cannot :manage, Product
-    end
+    can :manage, :all if user.admin?
+    can :access, :admin_panel if user.admin?
   end
 end
