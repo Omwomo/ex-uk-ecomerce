@@ -8,12 +8,11 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-greeting_data = [
-  { greeting: 'Hello!'},
-  { greeting: 'Good day!'},
-  { greeting: 'Greetings'},
-  { greeting: 'Welcome'},
-  { greeting: 'Hey there!'}
+category1 = Category.create(name: 'Kitchenware')
+
+product_data = [
+  { name: 'hotpot', description: 'xxx', price: '555.0', category_id: '1', image: 'http.com'},
+  { name: 'hotpot', description: 'xxx', price: '555.0', category_id: '1', image: 'http.com'}
 ]
 
-Message.create!(greeting_data)
+Product.create!(product_data)

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   get 'root/index'
-  get 'messages/index'
+  get 'products/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -11,13 +11,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'root#index'
 
-  get '*path', to: 'root#index', constraints: ->(req) { !req.xhr? && req.format.html? }
-
   namespace :api do
     namespace :v1 do
-      resources :messages, only: [:index]
+      resources :products, only: [:index]
       resources :users
-      resources :products
       resources :categories
       resources :orders
       resources :order_items
@@ -25,5 +22,7 @@ Rails.application.routes.draw do
       resources :reviews
     end
   end
+
+  get '*path', to: 'root#index', constraints: ->(req) { !req.xhr? && req.format.html? }
 
 end

@@ -1,10 +1,10 @@
-import { setGreeting } from './slices/greetingSlice';
+import { setProduct } from './slices/productSlice';
 
-export const fetchRandomGreeting = () => {
+export const fetchProducts = () => {
   return (dispatch) => {
-    fetch('/api/v1/messages')
+    fetch('/api/v1/products')
       .then((response) => response.json())
-      .then((data) => dispatch(setGreeting(data.greeting)))
+      .then((data) => dispatch(setProduct(data)))
       .catch((error) => console.error('Error fetching greeting:', error));
   };
 };

@@ -1,6 +1,6 @@
 class Api::V1::ProductsController < ApplicationController
-    before_action :authenticate_user!, except: [:index, :show]
-    load_and_authorize_resource
+    # before_action :authenticate_user!, except: [:index, :show]
+    # load_and_authorize_resource
   
     # GET /products
     def index

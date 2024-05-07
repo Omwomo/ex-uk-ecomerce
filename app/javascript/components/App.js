@@ -1,5 +1,5 @@
 import React from 'react'
-import Greeting from './Greeting.js'
+import Product from './Product.js'
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={ <Greeting />} />
+        <Route path='/' element={ <Product />} />
       </Routes>
     </Router>
   )
