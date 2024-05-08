@@ -13,13 +13,15 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products, only: [:index]
       resources :users
-      resources :categories
+      resources :products, only: [:show]
       resources :orders
       resources :order_items
       resources :inventories
       resources :reviews
+      resources :categories do
+        resources :products, only: [:index]
+      end
     end
   end
 
