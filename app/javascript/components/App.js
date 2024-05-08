@@ -1,16 +1,19 @@
-import React from 'react'
-import Product from './Product.js'
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Category from './Category';
+import ProductList from './ProductList';
+import ProductDetail from './ProductDetail';
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={ <Product />} />
+        <Route path='/' element={<Category />} />
+        <Route path='/category/:categoryId' element={<ProductList />} />
+        <Route path='/product/:productId' element={<ProductDetail />} />
       </Routes>
     </Router>
-  )
-}
+  );
+};
 
-export default App
+export default App;
