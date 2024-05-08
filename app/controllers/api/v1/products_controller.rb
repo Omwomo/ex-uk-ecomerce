@@ -4,7 +4,7 @@ class Api::V1::ProductsController < ApplicationController
   
     # GET /products
     def index
-      @products = Product.all
+      @products = Category.find(params[:category_id]).products
       render json: @products
     end
   
