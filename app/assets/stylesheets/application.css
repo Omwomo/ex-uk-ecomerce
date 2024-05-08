@@ -13,3 +13,18 @@
  *= require_tree .
  *= require_self
  */
+ body {
+    width: 100vh;
+ }
+
+ .products {
+    width: 50%;
+    height: 50%;
+    display: flex;
+ }
+ 
+ ul {
+    display: flex;
+    width: 100vw;
+    overflow-y: scroll;
+ }
