@@ -36,3 +36,22 @@ export const fetchProduct = (productId) => {
     }
   };
 };
+
+export const addToCart = (product) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch('/api/v1/orders/order_items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Include user token if available
+        },
+        body: JSON.stringify({ order_item: { product_id: product.id, quantity: 1 } }),
+      });
+      const data = await response.json();
+      dispatch({ type: 'ADD_TO_CART', payload: data });
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+    }
+  };
+};
