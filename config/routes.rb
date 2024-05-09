@@ -15,8 +15,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users
       resources :products, only: [:show]
-      resources :orders
-      resources :order_items
+      resources :orders do
+        resources :order_items
+      end
       resources :inventories
       resources :reviews
       resources :categories do

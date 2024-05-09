@@ -1,6 +1,5 @@
 class Api::V1::OrderItemsController < ApplicationController
-  before_action :authenticate_user!, except: [:create]
-  load_and_authorize_resource
+  # before_action :authenticate_user!
 
   # POST /order_items
   def create
@@ -31,9 +30,7 @@ class Api::V1::OrderItemsController < ApplicationController
 
   private
 
-  # Only allow a trusted parameter "white list" through.
   def order_item_params
     params.require(:order_item).permit(:order_id, :product_id, :quantity, :subtotal_price)
   end
 end
- 
