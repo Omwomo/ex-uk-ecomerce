@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       resources :users
       resources :products, only: [:show]
       resources :orders do
-        resources :order_items
+        resources :order_items, only: [:create]  # Define only the create action for order_items
       end
       resources :inventories
       resources :reviews
@@ -27,5 +27,4 @@ Rails.application.routes.draw do
   end
 
   get '*path', to: 'root#index', constraints: ->(req) { !req.xhr? && req.format.html? }
-
 end
