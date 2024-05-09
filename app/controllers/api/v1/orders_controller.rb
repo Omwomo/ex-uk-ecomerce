@@ -17,6 +17,8 @@ class Api::V1::OrdersController < ApplicationController
     # POST /orders
     def create
       @order = current_order
+      @order.user_id = current_user&.id
+
       if @order.save
         render json: @order, status: :created
       else
@@ -45,7 +47,7 @@ class Api::V1::OrdersController < ApplicationController
 
     def current_order
       if user_signed_in?
-        current_user.order || current_user.build_order
+        current_user.orders.build
       else
         guest_order || User.create_guest_user.build_order
       end
