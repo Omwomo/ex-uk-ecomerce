@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   categories: [],
   products: [],
+  cartItems: [],
   product: {},
 };
 
@@ -19,6 +20,9 @@ const appSlice = createSlice({
     },
     setProduct(state, action) {
       state.product = action.payload;
+    },
+    setCartItems(state, action) {
+      state.cartItems = action.payload
     },
     setLoading(state, action) {
       state.loading = action.payload;
