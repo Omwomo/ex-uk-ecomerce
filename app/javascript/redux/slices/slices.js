@@ -24,8 +24,8 @@ const appSlice = createSlice({
     setCartItems(state, action) {
       state.cartItems = action.payload
     },
-    updateCartItems(state, action) {
-      state.cartItems = action.payload;
+    addCartItem(state, action) {
+      state.cartItems.push(action.payload);
     },
     setLoading(state, action) {
       state.loading = action.payload;
@@ -33,5 +33,5 @@ const appSlice = createSlice({
   },
 });
 
-export const { setCategories, setProducts, setProduct, setLoading, updateCartItems } = appSlice.actions;
+export const { setCategories, setProducts, setProduct, setLoading, addCartItem, setCartItems } = appSlice.actions;
 export default appSlice.reducer;

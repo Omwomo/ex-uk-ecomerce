@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Header';
 import Category from './Category';
 import ProductList from './ProductList';
 import ProductDetail from './ProductDetail';
 import Cart from './Cart';
+import { fetchCartItems } from '../redux/actions';
 
 const App = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Fetch cart items when the component mounts
+    dispatch(fetchCartItems());
+  }, [dispatch]);
+
   return (
     <Router>
       <Header />
