@@ -1,4 +1,4 @@
-import { setCategories, setProducts, setProduct, updateCartItems } from './slices/slices';
+import { setCategories, setProducts, setProduct, addCartItem, setCartItems } from './slices/slices';
 // import { fetch } from 'whatwg-fetch';
 
 export const fetchCategories = () => {
@@ -51,10 +51,37 @@ export const addToCart = (product) => {
       const data = await response.json();
 
       // After adding the item to the cart, update the cartItems state
-      const updatedCartItems = [...getState().app.cartItems, data];
-      dispatch(updateCartItems(updatedCartItems));
+      dispatch(addCartItem(data)); // Use a separate action for adding cart items
     } catch (error) {
       console.error('Error adding product to cart:', error);
+    }
+  };
+};
+
+export const fetchCartItems = () => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch('/api/v1/orders');
+      const data = await response.json();
+
+      // Extract order items from each order and flatten the array
+      const cartItems = data.reduce((acc, order) => {
+        if (Array.isArray(order.order_items) && order.order_items.length > 0) {
+          acc.push(...order.order_items);
+        }
+        return acc;
+      }, []);
+
+      // Fetch product details for each order item
+      for (const item of cartItems) {
+        const productResponse = await fetch(`/api/v1/products/${item.product_id}`);
+        const productData = await productResponse.json();
+        item.product = productData; // Attach product details to each order item
+      }
+
+      dispatch(setCartItems(cartItems));
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
     }
   };
 };
