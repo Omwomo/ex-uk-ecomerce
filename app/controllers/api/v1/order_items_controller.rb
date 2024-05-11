@@ -45,7 +45,7 @@ class Api::V1::OrderItemsController < ApplicationController
     if user_signed_in?
       current_user.order || current_user.build_order
     else
-      guest_order || User.create_guest_user.build_order
+      guest_order || User.create_guest_user.orders.build # Build a new order with associated order items
     end
   end
 

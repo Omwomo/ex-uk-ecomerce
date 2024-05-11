@@ -4,8 +4,8 @@ class Api::V1::OrdersController < ApplicationController
   
     # GET /orders
     def index
-      @orders = current_order
-      render json: @orders
+      @orders = current_order.includes(order_items: { product: {} }) # Include associated order items with products
+      render json: @orders, include: [:order_items]
     end
   
     # GET /orders/:id
@@ -47,9 +47,9 @@ class Api::V1::OrdersController < ApplicationController
 
     def current_order
       if user_signed_in?
-        current_user.orders.build
+        current_user.orders # Don't include order_items here as they are already included in the index action
       else
-        guest_order || User.create_guest_user.build_order
+        User.create_guest_user.orders # Don't include order_items here as they are already included in the index action
       end
     end
 
