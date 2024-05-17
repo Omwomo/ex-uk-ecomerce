@@ -5,16 +5,9 @@ class Api::V1::OrderItemsController < ApplicationController
   # POST /order_items
   def create
     @order = current_order # Fetch or create the current order
-  
-    if user_signed_in?
-      @order.user_id = current_user.id
-    else
-      guest_user = User.create_guest_user
-      @order.user_id = guest_user.id
-    end
-  
+
     @order_item = @order.order_items.build(order_item_params)
-  
+
     if @order_item.save
       render json: @order_item, status: :created
     else
@@ -43,14 +36,21 @@ class Api::V1::OrderItemsController < ApplicationController
 
   def current_order
     if user_signed_in?
-      current_user.order || current_user.build_order
+      current_user.orders.first_or_create(status: 'new')
     else
-      guest_order || User.create_guest_user.orders.build # Build a new order with associated order items
+      guest_order || create_guest_order
     end
   end
 
   def guest_order
     Order.find_by(id: cookies.signed[:order_id])
+  end
+
+  def create_guest_order
+    guest_user = User.create_guest_user
+    order = guest_user.orders.create(status: 'new')
+    cookies.signed[:order_id] = order.id
+    order
   end
 
   def order_item_params
