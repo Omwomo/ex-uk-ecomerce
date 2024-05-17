@@ -12,19 +12,15 @@ class User < ApplicationRecord
   end
 
   def self.create_guest_user
-    # Try to find an existing guest user
-    user = User.find_by(email: 'guest@example.com')
-
-    # If a guest user is found, return it
-    return user if user
-
-    # If no guest user is found, create a new one
-    user = User.create(email: 'guest@example.com', firstname: 'Guest', lastname: 'User', password: 'guestpassword', role: 'guest')
-
-    # Create an order for the guest user
-    user.orders.create(status: nil, total_price: nil)
-
-    # Return the newly created guest user
+    unique_email = "guest_#{SecureRandom.hex(10)}@example.com"
+    user = User.create!(
+      email: unique_email,
+      firstname: 'Guest',
+      lastname: 'User',
+      password: SecureRandom.hex(10),
+      role: 'guest'
+    )
+    user.orders.create!(status: 'new', total_price: 0.0)
     user
   end
 end
