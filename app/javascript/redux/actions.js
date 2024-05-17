@@ -37,21 +37,19 @@ export const fetchProduct = (productId) => {
   };
 };
 
-export const addToCart = (product) => {
+export const addToCart = (product, quantity) => {
   return async (dispatch, getState) => {
     try {
-      const response = await fetch('/api/v1/orders/${order_id}/order_items', {
+      const response = await fetch(`/api/v1/orders/${order_id}/order_items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ order_item: { product_id: product.id, quantity: 1 } }),
+        body: JSON.stringify({ order_item: { product_id: product.id, quantity } }),
       });
       const data = await response.json();
-
-      // After adding the item to the cart, update the cartItems state
-      dispatch(addCartItem(data)); // Use a separate action for adding cart items
+      dispatch(addCartItem(data));
     } catch (error) {
       console.error('Error adding product to cart:', error);
     }
