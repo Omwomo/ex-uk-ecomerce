@@ -84,10 +84,10 @@ export const fetchCartItems = () => {
   };
 };
 
-export const updateCartItem = (product_id, quantity) => {
+export const updateCartItem = (itemId, quantity) => {
   return async (dispatch, getState) => {
     try {
-      const response = await fetch(`/api/v1/order_items/${product_id}`, {
+      const response = await fetch(`/api/v1/order_items/${itemId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

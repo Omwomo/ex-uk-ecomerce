@@ -18,8 +18,8 @@ const Cart = () => {
     return <div>No items in cart</div>;
   }
 
-  const handleQuantityChange = (product_id, quantity) => {
-    dispatch(updateCartItem(product_id, quantity));
+  const handleQuantityChange = (itemId, quantity) => {
+    dispatch(updateCartItem(itemId, quantity));
   };
 
   const totalAmount = cartItems.reduce((total, item) => total + item.subtotal_price, 0);
