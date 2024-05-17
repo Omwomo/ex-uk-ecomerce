@@ -1,4 +1,4 @@
-import { setCategories, setProducts, setProduct, addCartItem, setCartItems } from './slices/slices';
+import { setCategories, setProducts, setProduct, addCartItem, setCartItems, updateCartItemInState } from './slices/slices';
 // import { fetch } from 'whatwg-fetch';
 
 export const fetchCategories = () => {
@@ -86,10 +86,10 @@ export const fetchCartItems = () => {
   };
 };
 
-export const updateCartItem = (itemId, quantity) => {
+export const updateCartItem = (product_id, quantity) => {
   return async (dispatch, getState) => {
     try {
-      const response = await fetch(`/api/v1/order_items/${itemId}`, {
+      const response = await fetch(`/api/v1/order_items/${product_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -104,3 +104,8 @@ export const updateCartItem = (itemId, quantity) => {
     }
   };
 };
+
+export const updateCartItemInState = (item) => ({
+  type: 'UPDATE_CART_ITEM',
+  payload: item,
+});
