@@ -85,3 +85,22 @@ export const fetchCartItems = () => {
     }
   };
 };
+
+export const updateCartItem = (itemId, quantity) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await fetch(`/api/v1/order_items/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ order_item: { quantity } }),
+      });
+      const data = await response.json();
+      dispatch(updateCartItemInState(data));
+    } catch (error) {
+      console.error('Error updating cart item:', error);
+    }
+  };
+};
