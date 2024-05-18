@@ -12,6 +12,8 @@ class Api::V1::OrderItemsController < ApplicationController
     @order_item.subtotal_price = @order_item.quantity * @order_item.product.price
   
     if @order_item.save
+      @order.update_total_price
+      @order.save
       render json: @order_item, status: :created
     else
       render json: @order_item.errors, status: :unprocessable_entity
@@ -24,6 +26,8 @@ class Api::V1::OrderItemsController < ApplicationController
     if @order_item.update(order_item_params)
       @order_item.subtotal_price = @order_item.quantity * @order_item.product.price
       @order_item.save
+      @order_item.order.update_total_price
+      @order_item.order.save
       render json: @order_item
     else
       render json: @order_item.errors, status: :unprocessable_entity
@@ -33,7 +37,10 @@ class Api::V1::OrderItemsController < ApplicationController
   # DELETE /order_items/:id
   def destroy
     @order_item = OrderItem.find(params[:id])
+    order = @order_item.order
     @order_item.destroy
+    order.update_total_price
+    order.save
     head :no_content
   end
 

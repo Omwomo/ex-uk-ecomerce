@@ -22,7 +22,7 @@ const Cart = () => {
     dispatch(updateCartItem(itemId, quantity));
   };
 
-  const totalAmount = cartItems.reduce((total, item) => total + item.subtotal_price, 0);
+  const totalAmount = cartItems.reduce((total, item) => total + parseFloat(item.subtotal_price), 0).toFixed(2);
 
   return (
     <div>
