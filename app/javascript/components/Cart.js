@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCartItems, updateCartItem } from '../redux/actions';
+import { fetchCartItems, updateCartItem, removeCartItem } from '../redux/actions';
 
 const Cart = () => {
   const { cartItems, loading } = useSelector((state) => state.app);
@@ -20,6 +20,10 @@ const Cart = () => {
 
   const handleQuantityChange = (itemId, quantity) => {
     dispatch(updateCartItem(itemId, quantity));
+  };
+
+  const handleRemoveItem = (itemId) => {
+    dispatch(removeCartItem(itemId));
   };
 
   const totalAmount = cartItems.reduce((total, item) => total + parseFloat(item.subtotal_price), 0).toFixed(2);
@@ -44,6 +48,7 @@ const Cart = () => {
                 />
               </div>
               <div>Subtotal: {item.subtotal_price}</div>
+              <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
             </div>
           </li>
         ))}
