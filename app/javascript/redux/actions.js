@@ -104,3 +104,20 @@ export const updateCartItem = (itemId, quantity) => {
     }
   };
 };
+
+export const removeCartItem = (itemId) => {
+  return async (dispatch) => {
+    try {
+      await fetch(`/api/v1/order_items/${itemId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      dispatch(removeCartItemFromState(itemId));
+    } catch (error) {
+      console.error('Error removing cart item:', error);
+    }
+  };
+};
