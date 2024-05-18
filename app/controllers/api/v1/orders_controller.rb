@@ -60,7 +60,7 @@ class Api::V1::OrdersController < ApplicationController
   def create_guest_order
     guest_user = User.create_guest_user
     order = guest_user.orders.create(status: 'new')
-    cookies.signed[:order_id] = order.id
+    cookies.signed[:order_id] = { value: order.id, expires: 1.year.from_now } # Persistent for 1 year
     order
   end
 
