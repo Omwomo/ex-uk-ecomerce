@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   get 'root/index'
   get 'products/index'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -16,8 +17,9 @@ Rails.application.routes.draw do
       resources :users
       resources :products, only: [:show]
       resources :orders do
-        resources :order_items, only: [:create]  # Define only the create action for order_items
+        resources :order_items, only: [:create]
       end
+      resources :order_items, only: [:update, :destroy]  # Add routes for update and destroy actions here
       resources :inventories
       resources :reviews
       resources :categories do
