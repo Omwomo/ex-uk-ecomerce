@@ -39,6 +39,8 @@ export const fetchProduct = (productId) => {
 
 export const addToCart = (product, quantity) => {
   return async (dispatch, getState) => {
+    const { order_id } = getState().app; // Assuming order_id is stored in the state
+
     try {
       const response = await fetch(`/api/v1/orders/${order_id}/order_items`, {
         method: 'POST',
@@ -102,8 +104,3 @@ export const updateCartItem = (itemId, quantity) => {
     }
   };
 };
-
-export const updateCartItemInState = (item) => ({
-  type: 'UPDATE_CART_ITEM',
-  payload: item,
-});

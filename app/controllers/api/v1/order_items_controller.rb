@@ -5,11 +5,12 @@ class Api::V1::OrderItemsController < ApplicationController
   # POST /order_items
   def create
     @order = current_order
-
+  
     @order_item = @order.order_items.find_or_initialize_by(product_id: order_item_params[:product_id])
+    @order_item.quantity ||= 0
     @order_item.quantity += order_item_params[:quantity].to_i
     @order_item.subtotal_price = @order_item.quantity * @order_item.product.price
-
+  
     if @order_item.save
       render json: @order_item, status: :created
     else

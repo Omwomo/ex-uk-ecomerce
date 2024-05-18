@@ -4,8 +4,8 @@ class Api::V1::OrdersController < ApplicationController
 
   # GET /orders
   def index
-    @orders = current_order.includes(order_items: :product) # Include associated order items with products
-    render json: @orders, include: [:order_items]
+    @orders = current_user ? current_user.orders.includes(order_items: :product) : [current_order]
+    render json: @orders, include: [:order_items => { include: :product }]
   end
 
   # GET /orders/:id
@@ -47,21 +47,21 @@ class Api::V1::OrdersController < ApplicationController
 
   def current_order
     if user_signed_in?
-      current_user.orders # ActiveRecord relation
+      current_user.orders.first_or_create(status: 'new')
     else
       guest_order || create_guest_order
     end
   end
-
+  
   def guest_order
-    Order.where(id: cookies.signed[:order_id])
+    Order.find_by(id: cookies.signed[:order_id])
   end
-
+  
   def create_guest_order
     guest_user = User.create_guest_user
     order = guest_user.orders.create(status: 'new')
     cookies.signed[:order_id] = order.id
-    Order.where(id: order.id)
+    order
   end
 
   # Only allow a trusted parameter "white list" through.
