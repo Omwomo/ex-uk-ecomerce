@@ -33,11 +33,14 @@ const appSlice = createSlice({
         state.cartItems[index] = action.payload;
       }
     },
+    removeCartItemFromState(state, action) {
+      state.cartItems = state.cartItems.filter(item => item.id !== action.payload);
+    },
     setLoading(state, action) {
       state.loading = action.payload;
     },
   },
 });
 
-export const { setCategories, setProducts, setProduct, setLoading, addCartItem, setCartItems, updateCartItemInState } = appSlice.actions;
+export const { setCategories, setProducts, setProduct, setLoading, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState } = appSlice.actions;
 export default appSlice.reducer;

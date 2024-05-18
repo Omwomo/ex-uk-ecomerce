@@ -1,4 +1,4 @@
-import { setCategories, setProducts, setProduct, addCartItem, setCartItems, updateCartItemInState } from './slices/slices';
+import { setCategories, setProducts, setProduct, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState } from './slices/slices';
 // import { fetch } from 'whatwg-fetch';
 
 export const fetchCategories = () => {
