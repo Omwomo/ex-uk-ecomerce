@@ -1,6 +1,7 @@
 class Api::V1::OrderItemsController < ApplicationController
   skip_before_action :verify_authenticity_token
   # before_action :authenticate_user!
+  load_and_authorize_resource
 
   # POST /order_items
   def create

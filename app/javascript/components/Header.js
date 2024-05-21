@@ -13,8 +13,19 @@ const Header = () => {
       <nav>
         <ul>
           <li><Link to="/">Home</Link></li>
-          {/* Display loading state or cart items count based on loading state */}
           <li><Link to="/cart">Cart ({loading ? 'Loading...' : cartItemsCount})</Link></li>
+          {user ? (
+            <>
+              <li><Link to="/profile">Profile</Link></li>
+              {user.role === 'admin' && <li><Link to="/admin">Admin Panel</Link></li>}
+              <li><Link to="/logout">Logout</Link></li>
+            </>
+          ) : (
+            <>
+              <li><Link to="/signin">Sign In</Link></li>
+              <li><Link to="/signup">Sign Up</Link></li>
+            </>
+          )}
         </ul>
       </nav>
     </header>
