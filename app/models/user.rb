@@ -11,6 +11,14 @@ class User < ApplicationRecord
     orders.build
   end
 
+  enum role: { guest: 0, user: 1, admin: 2 }
+
+  after_initialize :set_default_role, if: :new_record?
+
+  def set_default_role
+    self.role ||= :user
+  end
+
   def self.create_guest_user
     unique_email = "guest_#{SecureRandom.hex(10)}@example.com"
     user = User.create!(
