@@ -121,3 +121,19 @@ export const removeCartItem = (itemId) => {
     }
   };
 };
+
+export const fetchCurrentUser = () => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch('/api/v1/current_user', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      dispatch(setCurrentUser(data));
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+    }
+  };
+};
