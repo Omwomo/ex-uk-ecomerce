@@ -1,5 +1,4 @@
-import { setCategories, setProducts, setProduct, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser } from './slices/slices';
-// import { fetch } from 'whatwg-fetch';
+import { setCategories, setProducts, setProduct, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, setLoading } from './slices/slices';
 
 export const fetchCategories = () => {
   return async (dispatch) => {
@@ -61,24 +60,14 @@ export const addToCart = (product, quantity) => {
 export const fetchCartItems = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch('/api/v1/orders');
+      const response = await fetch('/api/v1/orders', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       const data = await response.json();
 
-      // Extract order items from each order and flatten the array
-      const cartItems = data.reduce((acc, order) => {
-        if (Array.isArray(order.order_items) && order.order_items.length > 0) {
-          acc.push(...order.order_items);
-        }
-        return acc;
-      }, []);
-
-      // Fetch product details for each order item
-      for (const item of cartItems) {
-        const productResponse = await fetch(`/api/v1/products/${item.product_id}`);
-        const productData = await productResponse.json();
-        item.product = productData; // Attach product details to each order item
-      }
-
+      const cartItems = data.flatMap(order => order.order_items || []);
       dispatch(setCartItems(cartItems));
     } catch (error) {
       console.error('Error fetching cart items:', error);
@@ -122,18 +111,27 @@ export const removeCartItem = (itemId) => {
   };
 };
 
-export const fetchCurrentUser = () => {
-  return async (dispatch) => {
-    try {
-      const response = await fetch('/api/v1/current_user', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      const data = await response.json();
+export const fetchCurrentUser = () => async (dispatch) => {
+  dispatch(setLoading(true));
+  const token = localStorage.getItem('token');
+  if (!token) {
+    dispatch(setLoading(false));
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/v1/current_user', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const data = await response.json();
+    if (response.ok) {
       dispatch(setCurrentUser(data));
-    } catch (error) {
-      console.error('Error fetching current user:', error);
     }
-  };
+  } catch (error) {
+    console.error('Failed to fetch current user', error);
+  } finally {
+    dispatch(setLoading(false));
+  }
 };
