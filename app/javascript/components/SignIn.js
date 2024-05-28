@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser, setLoading } from '../redux/slices/slices';
 import { useNavigate } from 'react-router-dom';
+import { fetchCartItems } from '../redux/actions';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -32,6 +33,7 @@ const SignIn = () => {
         localStorage.setItem('token', data.token);
         dispatch(setCurrentUser(data.user));
         navigate('/');
+        dispatch(fetchCartItems());
       } else {
         console.error('Sign-in error:', data);
       }
