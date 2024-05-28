@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../redux/slices/slices';
 import { useNavigate } from 'react-router-dom';
+import { fetchCartItems } from '../redux/actions';
 
 const SignOut = () => {
   const dispatch = useDispatch();
@@ -21,8 +22,10 @@ const SignOut = () => {
           'X-CSRF-Token': csrfToken,
         },
       });
+      localStorage.removeItem('token');
       dispatch(signOut());
       navigate('/');
+      dispatch(fetchCartItems());
     } catch (error) {
       console.error('Sign-out error:', error);
     }
