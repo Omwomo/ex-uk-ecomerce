@@ -11,6 +11,8 @@ gem 'rubocop', '>= 1.0', '< 2.0'
 
 gem 'jwt'
 
+gem 'image_processing', '~> 1.2'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
