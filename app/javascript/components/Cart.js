@@ -37,16 +37,7 @@ const Cart = () => {
             <div>
               {item.product?.image && <img src={item.product.image} alt={item.product.name} />}
               <div>{item.product?.name}</div>
-              <div>Price: {item.product?.price}</div>
-              <div>
-                Quantity: 
-                <input 
-                  type="number" 
-                  value={item.quantity} 
-                  onChange={(e) => handleQuantityChange(item.id, Number(e.target.value))} 
-                  min="1" 
-                />
-              </div>
+              <div>Quantity: <input type="number" value={item.quantity} onChange={(e) => handleQuantityChange(item.id, e.target.value)} /></div>
               <div>Subtotal: {item.subtotal_price}</div>
               <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
             </div>

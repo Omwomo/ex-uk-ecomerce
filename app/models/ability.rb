@@ -2,13 +2,16 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new # Guest user
-    can :read, :all # Allow all users to read everything
+    user ||= User.new(role: :guest) # guest user (not logged in)
 
     if user.admin?
-      can :manage, :admin_panel # Allow admins to access the admin panel
-      can :manage, Product # Allow admins to manage products
-      can :manage, Inventory # Allow admins to manage inventories
+      can :manage, :all
+    else
+      can :read, :all # Allows reading all resources
+      
+      # CRUD permissions for orders and order items for all users
+      can :manage, Order
+      can :manage, OrderItem
     end
   end
 end

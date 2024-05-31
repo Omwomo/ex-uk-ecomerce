@@ -5,15 +5,19 @@ import Header from './Header';
 import Category from './Category';
 import ProductList from './ProductList';
 import ProductDetail from './ProductDetail';
+import AdminPanel from './AdminPanel';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 import Cart from './Cart';
-import { fetchCartItems } from '../redux/actions';
+import { fetchCartItems, fetchCurrentUser } from '../redux/actions';
 
 const App = () => {
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Fetch cart items when the component mounts
+    // Fetch cart items and current user when the component mounts
+    dispatch(fetchCurrentUser());
     dispatch(fetchCartItems());
   }, [dispatch]);
 
@@ -25,6 +29,9 @@ const App = () => {
         <Route path="/category/:categoryId" element={<ProductList />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </Router>
   );

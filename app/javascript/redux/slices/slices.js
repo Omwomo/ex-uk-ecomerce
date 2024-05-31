@@ -6,6 +6,7 @@ const initialState = {
   products: [],
   cartItems: [],
   product: {},
+  user: null,
 };
 
 const appSlice = createSlice({
@@ -36,11 +37,19 @@ const appSlice = createSlice({
     removeCartItemFromState(state, action) {
       state.cartItems = state.cartItems.filter(item => item.id !== action.payload);
     },
+    setCurrentUser(state, action) {
+      state.user = action.payload;
+    },
+    signOut(state) {
+      state.user = null;
+      state.cartItems = []; // Clear cart items on sign out
+      localStorage.removeItem('token');
+    },
     setLoading(state, action) {
       state.loading = action.payload;
     },
   },
 });
 
-export const { setCategories, setProducts, setProduct, setLoading, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState } = appSlice.actions;
+export const { setCategories, setProducts, setProduct, setLoading, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, signOut } = appSlice.actions;
 export default appSlice.reducer;
