@@ -15,6 +15,10 @@ const Header = () => {
     dispatch(fetchCurrentUser());
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log('Current user:', user);
+  }, [user]);
+
   return (
     <header>
       <nav>
@@ -24,7 +28,7 @@ const Header = () => {
           {user ? (
             <>
               <li><Link to="/profile">Profile</Link></li>
-              {user.role === 2 && <li><Link to="/admin">Admin Panel</Link></li>}
+              {user.role === "admin" && <li><Link to="/admin">Admin Panel</Link></li>}
               <li><SignOut /></li>
             </>
           ) : (
