@@ -71,7 +71,7 @@ class Api::V1::OrdersController < ApplicationController
     if guest_order
       guest_order.order_items.update_all(order_id: user_order.id)
       guest_order.destroy
-      cookies.delete(:guest_order_id)
+      # cookies.delete(:guest_order_id)
     end
   end
 
