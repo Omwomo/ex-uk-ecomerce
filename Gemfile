@@ -13,6 +13,12 @@ gem 'jwt'
 
 gem 'image_processing', '~> 1.2'
 
+gem 'active_model_serializers'
+
+gem 'activestorage', '~> 7.1.3.3'
+
+# gem 'ruby-vips', '~> 2.1', '>= 2.1.4'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 
