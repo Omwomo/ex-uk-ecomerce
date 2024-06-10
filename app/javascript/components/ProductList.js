@@ -24,7 +24,7 @@ const ProductList = () => {
           <li key={product.id}>
             <Link to={`/product/${product.id}`}>
               <div className='products'>
-                <img src={product.image} alt='product image' />
+                <img className='product_image' src={product.image_url} alt='product image' />
                 <div>{product.name}</div>
                 <div>{product.description}</div>
                 <div>{product.price}</div>

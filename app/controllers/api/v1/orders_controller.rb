@@ -4,14 +4,13 @@ class Api::V1::OrdersController < ApplicationController
 
   # GET /orders
   def index
-    @orders = current_user ? current_user.orders.includes(order_items: :product) : [current_order]
-    render json: @orders, include: [:order_items => { include: :product }]
+    @orders = current_user ? current_user.orders.includes(order_items: { product: { image_attachment: :blob } }) : [current_order]
+    render json: @orders, each_serializer: OrderSerializer, include: '**'
   end
-
   # GET /orders/:id
   def show
-    @order = current_order.find(params[:id])
-    render json: @order
+    @order = current_order.includes(order_items: { product: { image_attachment: :blob } }).find(params[:id])
+    render json: @order, include: { order_items: { include: :product } }
   end
 
   # POST /orders
@@ -47,7 +46,7 @@ class Api::V1::OrdersController < ApplicationController
 
   def current_order
     if user_signed_in?
-      order = current_user.orders.find_or_create_by(status: 'new')
+      order = current_user.orders.includes(order_items: :product).find_or_create_by(status: 'new')
       transfer_guest_order_to_user(order) if cookies.signed[:guest_order_id].present?
       order
     else
@@ -56,7 +55,7 @@ class Api::V1::OrdersController < ApplicationController
   end
 
   def guest_order
-    Order.find_by(id: cookies.signed[:guest_order_id])
+    Order.includes(order_items: :product).find_by(id: cookies.signed[:guest_order_id])
   end
 
   def create_guest_order

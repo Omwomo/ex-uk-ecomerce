@@ -27,7 +27,7 @@ const Header = () => {
           <li><Link to="/cart">Cart ({loading ? 'Loading...' : cartItemsCount})</Link></li>
           {user ? (
             <>
-              <li><Link to="/profile">Profile</Link></li>
+              {user.role === "user" && <li><Link to="/profile">Profile</Link></li>}
               {user.role === "admin" && <li><Link to="/admin">Admin Panel</Link></li>}
               <li><SignOut /></li>
             </>

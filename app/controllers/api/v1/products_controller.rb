@@ -4,13 +4,17 @@ class Api::V1::ProductsController < ApplicationController
   
     # GET /products
     def index
-      @products = Category.find(params[:category_id]).products
+      if params[:category_id]
+        @products = Category.includes(products: { image_attachment: :blob }).find(params[:category_id]).products
+      else
+        @products = Product.includes(image_attachment: :blob).all
+      end
       render json: @products
     end
   
     # GET /products/:id
     def show
-      @product = Product.find(params[:id])
+      @product = Product.includes(image_attachment: :blob).find(params[:id])
       render json: @product
     end
   
@@ -37,6 +41,12 @@ class Api::V1::ProductsController < ApplicationController
     # DELETE /products/:id
     def destroy
       @product = Product.find(params[:id])
+      ActiveRecord::Base.transaction do
+        order_items = OrderItem.where(product_id: @product.id)
+        orders = order_items.map(&:order).uniq
+        order_items.destroy_all
+        orders.each(&:update_total_price)
+      end
       @product.destroy
       head :no_content
     end

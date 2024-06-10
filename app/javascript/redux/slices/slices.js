@@ -22,6 +22,18 @@ const appSlice = createSlice({
     setProduct(state, action) {
       state.product = action.payload;
     },
+    addProduct(state, action) {
+      state.products.push(action.payload);
+    },
+    editProduct(state, action) {
+      const index = state.products.findIndex(product => product.id === action.payload.id);
+      if (index !== -1) {
+        state.products[index] = action.payload;
+      }
+    },
+    removeProduct(state, action) {
+      state.products = state.products.filter(product => product.id !== action.payload);
+    },
     setCartItems(state, action) {
       state.cartItems = action.payload
     },
@@ -51,5 +63,5 @@ const appSlice = createSlice({
   },
 });
 
-export const { setCategories, setProducts, setProduct, setLoading, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, signOut } = appSlice.actions;
+export const { setCategories, setProducts, setProduct, addProduct, editProduct, removeProduct, setLoading, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, signOut } = appSlice.actions;
 export default appSlice.reducer;

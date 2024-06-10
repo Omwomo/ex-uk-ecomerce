@@ -24,9 +24,10 @@ const ProductDetail = () => {
   return (
     <div>
       <h1>{product.name}</h1>
-      <img src={product.image} alt='product image' />
+      <img className='product_image' src={product.image_url} alt='product image' />
       <div>{product.description}</div>
       <div>{product.price}</div>
+      <div>{product.inventory}</div>
       <div>
         <input 
           type="number" 

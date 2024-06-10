@@ -1,4 +1,4 @@
-import { setCategories, setProducts, setProduct, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, setLoading } from './slices/slices';
+import { setCategories, setProducts, setProduct, addProduct, editProduct, removeProduct, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, setLoading } from './slices/slices';
 
 export const fetchCategories = () => {
   return async (dispatch) => {
@@ -38,7 +38,12 @@ export const fetchProduct = (productId) => {
 
 export const addToCart = (product, quantity) => {
   return async (dispatch, getState) => {
-    const { order_id } = getState().app; // Assuming order_id is stored in the state
+    const { order_id } = getState().app;
+
+    if (quantity > product.inventory) {
+      alert(`Only ${product.inventory} items available in stock.`);
+      return;
+    }
 
     try {
       const response = await fetch(`/api/v1/orders/${order_id}/order_items`, {
@@ -77,6 +82,14 @@ export const fetchCartItems = () => {
 
 export const updateCartItem = (itemId, quantity) => {
   return async (dispatch, getState) => {
+    const cartItem = getState().app.cartItems.find(item => item.id === itemId);
+    const product = cartItem.product;
+
+    if (quantity > product.inventory) {
+      alert(`Only ${product.inventory} items available in stock.`);
+      return;
+    }
+
     try {
       const response = await fetch(`/api/v1/order_items/${itemId}`, {
         method: 'PUT',
@@ -133,5 +146,63 @@ export const fetchCurrentUser = () => async (dispatch) => {
     console.error('Failed to fetch current user', error);
   } finally {
     dispatch(setLoading(false));
+  }
+};
+
+export const fetchProducts = () => async (dispatch) => {
+  try {
+    const response = await fetch('/api/v1/products');
+    const data = await response.json();
+    dispatch(setProducts(data));
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  }
+};
+
+export const createProduct = (productData) => async (dispatch) => {
+  try {
+    const response = await fetch('/api/v1/products', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      },
+      body: productData
+    });
+    const data = await response.json();
+    dispatch(addProduct(data));
+  } catch (error) {
+    console.error('Error creating product:', error);
+  }
+};
+
+export const updateProduct = (productId, productData) => async (dispatch) => {
+  try {
+    const response = await fetch(`/api/v1/products/${productId}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      },
+      body: productData
+    });
+    const data = await response.json();
+    dispatch(editProduct(data));
+  } catch (error) {
+    console.error('Error updating product:', error);
+  }
+};
+
+export const deleteProduct = (productId) => async (dispatch) => {
+  try {
+    await fetch(`/api/v1/products/${productId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    dispatch(removeProduct(productId));
+    // Fetch updated cart items if the product is deleted
+    dispatch(fetchCartItems());
+  } catch (error) {
+    console.error('Error deleting product:', error);
   }
 };

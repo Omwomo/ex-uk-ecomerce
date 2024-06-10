@@ -18,7 +18,11 @@ const Cart = () => {
     return <div>No items in cart</div>;
   }
 
-  const handleQuantityChange = (itemId, quantity) => {
+  const handleQuantityChange = (itemId, quantity, maxQuantity) => {
+    if (quantity > maxQuantity) {
+      alert(`Only ${maxQuantity} items available in stock.`);
+      return;
+    }
     dispatch(updateCartItem(itemId, quantity));
   };
 
@@ -35,9 +39,9 @@ const Cart = () => {
         {cartItems.map(item => (
           <li key={item.id}>
             <div>
-              {item.product?.image && <img src={item.product.image} alt={item.product.name} />}
+              {item.product?.image_url && <img className='product_image' src={item.product.image_url} alt={item.product.name} />}
               <div>{item.product?.name}</div>
-              <div>Quantity: <input type="number" value={item.quantity} onChange={(e) => handleQuantityChange(item.id, e.target.value)} /></div>
+              <div>Quantity: <input type="number" value={item.quantity} onChange={(e) => handleQuantityChange(item.id, e.target.value, item.product?.inventory)} /></div>
               <div>Subtotal: {item.subtotal_price}</div>
               <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
             </div>

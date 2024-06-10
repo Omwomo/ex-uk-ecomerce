@@ -1,17 +1,21 @@
 class Api::V1::OrderItemsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  # before_action :authenticate_user!
   load_and_authorize_resource
 
   # POST /order_items
   def create
     @order = current_order
-  
-    @order_item = @order.order_items.find_or_initialize_by(product_id: order_item_params[:product_id])
-    @order_item.quantity ||= 0
-    @order_item.quantity += order_item_params[:quantity].to_i
-    @order_item.subtotal_price = @order_item.quantity * @order_item.product.price
-  
+    product = Product.find(order_item_params[:product_id])
+
+    if product.inventory < order_item_params[:quantity].to_i
+      render json: { error: 'Not enough inventory' }, status: :unprocessable_entity
+      return
+    end
+
+    @order_item = @order.order_items.find_or_initialize_by(product_id: product.id)
+    @order_item.quantity = [@order_item.quantity.to_i + order_item_params[:quantity].to_i, product.inventory].min
+    @order_item.subtotal_price = @order_item.quantity * product.price
+
     if @order_item.save
       @order.update_total_price
       @order.save
@@ -24,8 +28,15 @@ class Api::V1::OrderItemsController < ApplicationController
   # PATCH/PUT /order_items/:id
   def update
     @order_item = OrderItem.find(params[:id])
+    product = @order_item.product
+
+    if order_item_params[:quantity].to_i > product.inventory
+      render json: { error: 'Not enough inventory' }, status: :unprocessable_entity
+      return
+    end
+
     if @order_item.update(order_item_params)
-      @order_item.subtotal_price = @order_item.quantity * @order_item.product.price
+      @order_item.subtotal_price = @order_item.quantity * product.price
       @order_item.save
       @order_item.order.update_total_price
       @order_item.order.save
@@ -49,7 +60,7 @@ class Api::V1::OrderItemsController < ApplicationController
 
   def current_order
     if user_signed_in?
-      order = current_user.orders.find_or_create_by(status: 'new')
+      order = current_user.orders.includes(order_items: :product).find_or_create_by(status: 'new')
       transfer_guest_order_to_user(order) if cookies.signed[:guest_order_id].present?
       order
     else
@@ -58,7 +69,7 @@ class Api::V1::OrderItemsController < ApplicationController
   end
 
   def guest_order
-    Order.find_by(id: cookies.signed[:guest_order_id])
+    Order.includes(order_items: :product).find_by(id: cookies.signed[:guest_order_id])
   end
 
   def create_guest_order
@@ -73,7 +84,6 @@ class Api::V1::OrderItemsController < ApplicationController
     if guest_order
       guest_order.order_items.update_all(order_id: user_order.id)
       guest_order.destroy
-      # cookies.delete(:guest_order_id)
     end
   end
 

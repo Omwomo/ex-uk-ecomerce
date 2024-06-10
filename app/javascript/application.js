@@ -6,11 +6,11 @@ import ReactDOM from 'react-dom/client';
 
 import App from './components/App';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
-root.render(
-  <Provider store={store}>
-    <h1>Greetings from Eugene :</h1>
-    <App />
-  </Provider>
-);
+document.addEventListener('DOMContentLoaded', () => {
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+})

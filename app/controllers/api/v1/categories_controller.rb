@@ -4,14 +4,14 @@ class Api::V1::CategoriesController < ApplicationController
 
     # GET /categories
     def index
-        @categories = Category.all
+        @categories = Category.includes(:products).all
         render json: @categories
     end
 
     # GET /categories/:id
     def show
-        @category = Category.find(params[:id])
-        render json: @category
+        @category = Category.includes(:products).find(params[:id])
+        render json: @category, include: :products
     end
 
     # POST /categories
