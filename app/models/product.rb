@@ -6,7 +6,7 @@ class Product < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
-  after_update :sync_cart_quantities, if: :saved_change_to_inventory?
+  after_update :sync_cart_quantities, if: :saved_change_to_inventory? || :saved_change_to_price?
 
   def image_url
     Rails.application.routes.url_helpers.url_for(image) if image.attached?
@@ -18,9 +18,11 @@ class Product < ApplicationRecord
     order_items.each do |item|
       if item.quantity > inventory
         item.update(quantity: inventory, subtotal_price: inventory * price)
-        item.order.update_total_price
-        item.order.save
+      else
+        item.update(subtotal_price: item.quantity * price)
       end
+      item.order.update_total_price
+      item.order.save
     end
   end
 end
