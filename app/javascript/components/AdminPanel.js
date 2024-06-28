@@ -16,6 +16,9 @@ const AdminPanel = () => {
     image: null
   });
 
+  const [editMode, setEditMode] = useState(false);
+  const [currentProductId, setCurrentProductId] = useState(null);
+
   useEffect(() => {
     if (user && user.role === 'admin') {
       dispatch(fetchProducts());
@@ -44,12 +47,27 @@ const AdminPanel = () => {
     for (const key in productForm) {
       formData.append(`product[${key}]`, productForm[key]);
     }
-    await dispatch(createProduct(formData));
-    setProductForm({ name: '', description: '', price: '', category_id: '', inventory, image: null });
+    if (editMode) {
+      await dispatch(updateProduct(currentProductId, formData));
+      setEditMode(false);
+      setCurrentProductId(null);
+    } else {
+      await dispatch(createProduct(formData));
+    }
+    setProductForm({ name: '', description: '', price: '', category_id: '', inventory: '', image: null });
   };
 
   const handleEdit = (productId) => {
-    // Logic for editing product
+    const product = products.find(p => p.id === productId);
+    setProductForm({
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      category_id: product.category_id,
+      inventory: product.inventory
+    });
+    setEditMode(true);
+    setCurrentProductId(productId);
   };
 
   const handleDelete = (productId) => {
@@ -77,7 +95,7 @@ const AdminPanel = () => {
           ))}
         </select>
         <input type="file" name="image" onChange={handleImageChange} />
-        <button type="submit">Add Product</button>
+        <button type="submit">{editMode ? 'Update Product' : 'Add Product'}</button>
       </form>
       <div>
         <h1>Products</h1>
@@ -90,6 +108,7 @@ const AdminPanel = () => {
                   <div>{product.name}</div>
                   <div>{product.description}</div>
                   <div>{product.price}</div>
+                  <div>{product.inventory}</div>
                 </div>
               </Link>
               <button onClick={() => handleEdit(product.id)}>Edit</button>
