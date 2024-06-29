@@ -15,10 +15,6 @@ const Header = () => {
     dispatch(fetchCurrentUser());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log('Current user:', user);
-  }, [user]);
-
   return (
     <header>
       <nav>
