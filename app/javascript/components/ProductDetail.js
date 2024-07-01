@@ -11,6 +11,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     dispatch(fetchProduct(productId));
+    console.log('product details', product)
   }, [dispatch, productId]);
 
   if (loading) {
