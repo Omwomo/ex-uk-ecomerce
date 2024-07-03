@@ -9,6 +9,7 @@ import AdminPanel from './AdminPanel';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import Cart from './Cart';
+import Checkout from './Checkout';
 import { fetchCartItems, fetchCurrentUser } from '../redux/actions';
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </Router>
   );
