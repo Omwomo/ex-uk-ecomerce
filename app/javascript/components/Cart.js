@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCartItems, updateCartItem, removeCartItem } from '../redux/actions';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
   const { cartItems, loading } = useSelector((state) => state.app);
@@ -49,6 +50,7 @@ const Cart = () => {
         ))}
       </ul>
       <div>Total Amount: {totalAmount}</div>
+      <div><Link to="/checkout">Checkout</Link></div>
     </div>
   );
 };
