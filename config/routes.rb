@@ -16,11 +16,16 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :users, only: [:index, :show, :create, :update, :destroy]
+      resources :users, only: [:index, :show, :create, :update, :destroy] do
+        resources :checkouts, only: [:index]
+        resources :orders, only: [:index, :show, :create, :update, :destroy]
+      end
       resources :products, only: [:index, :show, :create, :update, :destroy]
       resources :orders do
         resources :order_items, only: [:create]
       end
+      resources :checkouts
+      post 'mpesa/callback', to: 'mpesa#callback'
       resources :order_items, only: [:update, :destroy]
       resources :inventories
       resources :reviews
