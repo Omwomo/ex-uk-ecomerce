@@ -11,6 +11,8 @@ gem 'rubocop', '>= 1.0', '< 2.0'
 
 gem 'jwt'
 
+gem 'http'
+
 gem 'image_processing', '~> 1.2'
 
 gem 'active_model_serializers'
