@@ -5,6 +5,7 @@ const initialState = {
   categories: [],
   products: [],
   cartItems: [],
+  checkouts: [],
   product: {},
   user: null,
 };
@@ -57,11 +58,23 @@ const appSlice = createSlice({
       state.cartItems = []; // Clear cart items on sign out
       localStorage.removeItem('token');
     },
+    setCheckouts(state, action) {
+      state.checkouts = action.payload;
+    },
+    addCheckout(state, action) {
+      state.checkouts.push(action.payload);
+    },
+    updateCheckoutInState(state, action) {
+      const index = state.checkouts.findIndex((checkout) => checkout.id === action.payload.id);
+      if (index !== -1) {
+        state.checkouts[index] = action.payload;
+      }
+    },
     setLoading(state, action) {
       state.loading = action.payload;
     },
   },
 });
 
-export const { setCategories, setProducts, setProduct, addProduct, editProduct, removeProduct, setLoading, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, signOut } = appSlice.actions;
+export const { setCategories, setProducts, setProduct, addProduct, editProduct, removeProduct, setLoading, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, signOut, setCheckouts, addCheckout, updateCheckoutInState } = appSlice.actions;
 export default appSlice.reducer;
