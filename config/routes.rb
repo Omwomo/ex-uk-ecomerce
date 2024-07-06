@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         resources :order_items, only: [:create]
       end
       resources :checkouts
+      post 'mpesa/initiate_payment', to: 'mpesa#initiate_payment'
       post 'mpesa/callback', to: 'mpesa#callback'
       resources :order_items, only: [:update, :destroy]
       resources :inventories
