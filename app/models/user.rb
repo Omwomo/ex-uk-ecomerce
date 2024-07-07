@@ -6,6 +6,7 @@ class User < ApplicationRecord
   
   has_many :reviews
   has_many :orders
+  has_many :checkouts
 
   def build_order
     orders.build
