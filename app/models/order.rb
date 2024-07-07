@@ -1,6 +1,7 @@
 class Order < ApplicationRecord
   belongs_to :user
   has_many :order_items
+  has_one :checkout
 
   before_save :update_total_price
 
