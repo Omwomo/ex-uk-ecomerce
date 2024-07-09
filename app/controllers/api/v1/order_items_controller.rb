@@ -7,8 +7,8 @@ class Api::V1::OrderItemsController < ApplicationController
     @order = current_order
     product = Product.find(order_item_params[:product_id])
 
-    if product.inventory < order_item_params[:quantity].to_i
-      render json: { error: 'Not enough inventory' }, status: :unprocessable_entity
+    if product.inventory < order_item_params[:quantity].to_i || order_item_params[:quantity].to_i < 1
+      render json: { error: 'Invalid quantity or not enough inventory' }, status: :unprocessable_entity
       return
     end
 
@@ -30,8 +30,8 @@ class Api::V1::OrderItemsController < ApplicationController
     @order_item = OrderItem.find(params[:id])
     product = @order_item.product
 
-    if order_item_params[:quantity].to_i > product.inventory
-      render json: { error: 'Not enough inventory' }, status: :unprocessable_entity
+    if order_item_params[:quantity].to_i > product.inventory || order_item_params[:quantity].to_i < 1
+      render json: { error: 'Invalid quantity or not enough inventory' }, status: :unprocessable_entity
       return
     end
 
