@@ -16,7 +16,22 @@ class Api::V1::CheckoutsController < ApplicationController
     render json: @checkout
   end
 
-   
+   # POST /api/v1/checkouts
+   def create
+    @checkout = Checkout.new(checkout_params)
+
+    if @checkout.save
+      if @checkout.payment_method == 'MPESA'
+        mpesa_service = MpesaService.new
+        response = mpesa_service.initiate_payment(@checkout.customer_contact, @checkout.total_amount, @checkout.id, 'Order Payment')
+        @checkout.update(mpesa_checkout_id: response['CheckoutRequestID']) if response['ResponseCode'] == '0'
+      end
+
+      render json: @checkout, status: :created
+    else
+      render json: @checkout.errors, status: :unprocessable_entity
+    end
+  end
 
   private
 
