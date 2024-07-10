@@ -1,4 +1,4 @@
-import { setCategories, setProducts, setProduct, addProduct, editProduct, removeProduct, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, setLoading } from './slices/slices';
+import { setCategories, setProducts, setProduct, addProduct, editProduct, removeProduct, addCartItem, setCartItems, updateCartItemInState, removeCartItemFromState, setCurrentUser, setLoading, setCheckouts, updateCheckoutInState } from './slices/slices';
 
 export const fetchCategories = () => {
   return async (dispatch) => {
@@ -205,4 +205,16 @@ export const deleteProduct = (productId) => async (dispatch) => {
   } catch (error) {
     console.error('Error deleting product:', error);
   }
+};
+
+export const fetchCheckouts = () => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`/api/v1/checkouts`);
+      const data = await response.json();
+      dispatch(setCheckouts(data));
+    } catch (error) {
+      console.error('Error fetching checkouts:', error);
+    }
+  };
 };
