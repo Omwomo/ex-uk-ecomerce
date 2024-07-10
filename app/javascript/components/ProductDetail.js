@@ -31,6 +31,21 @@ const ProductDetail = () => {
     setQuantity(newQuantity);
   };
 
+  const handleWhatsAppOrder = () => {
+    const adminPhoneNumber = '+254716335602';
+    const message = `Hello, I would like to order the following product:
+    Product Name: ${product.name}
+    Price: ${product.price}
+    Quantity: ${quantity}
+    Total: ${product.price * quantity}`;
+
+    const url = `https://wa.me/${adminPhoneNumber}?text=${encodeURIComponent(message)}`;
+    window.location.href = url;
+  };
+
+  const url = `${window.location.origin}/product/${product.id}`;
+  const title = `Check out this product: ${product.name}`;
+
   return (
     <div>
       <h1>{product.name}</h1>
