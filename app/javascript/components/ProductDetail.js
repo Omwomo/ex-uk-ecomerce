@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProduct, addToCart } from '../redux/actions';
 import { useParams } from 'react-router-dom';
+import SocialShare from './SocialShare';
 
 const ProductDetail = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,16 @@ const ProductDetail = () => {
   }
 
   const handleAddToCart = () => {
-    dispatch(addToCart(product, quantity));
+    const quantityToAdd = Math.max(quantity, 1);
+    dispatch(addToCart(product, quantityToAdd));
+  };
+
+  const handleQuantityChange = (e) => {
+    let newQuantity = parseInt(e.target.value, 10);
+    if (newQuantity < 1 || isNaN(newQuantity)) {
+      newQuantity = 1;
+    }
+    setQuantity(newQuantity);
   };
 
   return (
@@ -32,11 +42,13 @@ const ProductDetail = () => {
         <input 
           type="number" 
           value={quantity} 
-          onChange={(e) => setQuantity(Number(e.target.value))} 
+          onChange={handleQuantityChange} 
           min="1" 
         />
       </div>
       <button onClick={handleAddToCart}>Add to Cart</button>
+      <button onClick={handleWhatsAppOrder}>Order via WhatsApp</button>
+      <SocialShare url={url} title={title} />
     </div>
   );
 };
