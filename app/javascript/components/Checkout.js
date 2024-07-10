@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { createOrder } from '../redux/actions';
 import Cart from './Cart';
-import axios from 'axios';
 
 const Checkout = () => {
   const { cartItems, user } = useSelector((state) => state.app);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [contactNumber, setContactNumber] = useState('');
   const [pickupLocation, setPickupLocation] = useState('');
@@ -29,27 +30,11 @@ const Checkout = () => {
     };
 
     if (paymentMethod === 'MPESA') {
-      try {
-        const response = await axios.post('/api/v1/mpesa/initiate_payment', {
-          phone_number: contactNumber,
-          amount: totalAmount,
-          account_reference: 'ORDER12345', // You can customize this
-          transaction_description: 'Payment for order 12345', // Customize this
-        });
-
-        if (response.data.ResponseCode === '0') {
-          alert('Please check your phone to complete the payment.');
-        } else {
-          alert('Failed to initiate MPESA payment.');
-        }
-      } catch (error) {
-        console.error('MPESA payment error:', error);
-        alert('An error occurred while initiating MPESA payment.');
-      }
+      navigate('/mpesa');
     } else if (paymentMethod === 'CARD') {
-      // Navigate to Stripe payment page
+      navigate('/card_payment')
     } else if (paymentMethod === 'WHATSAPP') {
-      // Navigate to WhatsApp order page
+      navigate('/whatsapp')
     } else {
       dispatch(createOrder(orderDetails));
     }
