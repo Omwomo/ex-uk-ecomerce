@@ -218,6 +218,7 @@ export const fetchCheckouts = () => {
     }
   };
 };
+
 export const fetchUserCheckouts = (userId) => {
   return async (dispatch) => {
     try {
