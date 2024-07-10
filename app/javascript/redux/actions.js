@@ -218,3 +218,14 @@ export const fetchCheckouts = () => {
     }
   };
 };
+export const fetchUserCheckouts = (userId) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`/api/v1/users/${userId}/checkouts`);
+      const data = await response.json();
+      dispatch(setCheckouts(data));
+    } catch (error) {
+      console.error('Error fetching user checkouts:', error);
+    }
+  };
+};
