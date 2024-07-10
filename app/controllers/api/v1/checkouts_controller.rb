@@ -10,7 +10,13 @@ class Api::V1::CheckoutsController < ApplicationController
     render json: @checkouts
   end
 
-  
+  # GET /api/v1/checkouts/:id
+  def show
+    @checkout = Checkout.find(params[:id])
+    render json: @checkout
+  end
+
+   
 
   private
 
